@@ -3,7 +3,7 @@
 module.exports = {
   content: [
     './templates/**/*.html',
-    './books/templates/**/*.html',
+    './books/templates/*.html',
     './**/*.html',
   ],
   theme: {
