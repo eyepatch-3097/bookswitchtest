@@ -4,29 +4,34 @@
 
 <div class="container mx-auto px-4 py-8">
     <h1 class="text-4xl font-bold text-center mb-8 text-gray-800">Available Books</h1>
-    <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+    <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-10">
         {% for book in books %}
-        <div class="bg-white shadow-md rounded-lg p-6">
-            <h3 class="text-xl font-semibold text-gray-800 mb-2">{{ book.name }}</h3>
-            <p class="text-gray-600 mb-2"><strong>Author:</strong> {{ book.author }}</p>
-            <p class="text-gray-600 mb-2"><strong>Condition:</strong> {{ book.condition }}/5</p>
-            <p class="text-gray-600 mb-4">
-                <strong>Status:</strong>
-                {% if book.is_rented %}
-                    <span class="text-red-500 font-bold">Rented</span>
-                {% else %}
-                    <span class="text-green-500 font-bold">Available</span>
+        <div class="bg-white shadow-md rounded-lg p-8 border border-blue-200">
+            <div class="flex justify-between items-center">
+                <div>
+                    <h3 class="text-2xl font-semibold text-gray-800 mb-2">{{ book.name }}</h3>
+                    <p class="text-gray-600 mb-1"><strong>Author:</strong> {{ book.author }}</p>
+                    <p class="text-gray-600 mb-1"><strong>Condition:</strong> {{ book.condition }}/5</p>
+                    <p class="text-gray-600">
+                        <strong>Status:</strong>
+                        {% if book.is_rented %}
+                            <span class="text-red-500 font-bold">Rented</span>
+                        {% else %}
+                            <span class="text-green-500 font-bold">Available</span>
+                        {% endif %}
+                    </p>
+                </div>
+                {% if not book.is_rented %}
+                <form method="post" action="{% url 'books:rent_book' book.id %}">
+                    {% csrf_token %}
+                    <button type="submit" class="ml-auto bg-blue-500 hover:bg-blue-600 text-white py-1 px-4 rounded-md font-semibold text-sm">
+                        Rent
+                    </button>
+                </form>
                 {% endif %}
-            </p>
-            {% if not book.is_rented %}
-            <form method="post" action="{% url 'books:rent_book' book.id %}">
-                {% csrf_token %}
-                <button type="submit" class="w-full bg-blue-500 hover:bg-blue-600 text-white py-2 rounded-md font-semibold">
-                    Rent This Book
-                </button>
-            </form>
-            {% else %}
-            <p class="text-center text-gray-500 font-semibold">This book is currently rented.</p>
+            </div>
+            {% if book.is_rented %}
+            <p class="text-center text-gray-500 font-semibold mt-4">This book is currently rented.</p>
             {% endif %}
         </div>
         {% endfor %}
